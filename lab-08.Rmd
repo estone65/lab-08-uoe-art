@@ -12,7 +12,7 @@ library(tidyverse)
 library(skimr)
 ```
 
-```{r load-data, message = FALSE, eval = FALSE}
+```{r load-data, message = FALSE, eval = TRUE}
 # Remove eval = FALSE or set it to TRUE once data is ready to be loaded
 uoe_art <- read_csv("data/uoe-art.csv")
 ```
@@ -47,6 +47,86 @@ library(skimr)
 skim(uoe_art_cleandate)
 ```
 
+115 have artist missing. 
+1568 have year missing.
+
+### Exercise 12
+
+> Make a histogram of years. Use a reasonable binwidth. Do you see anything out of the ordinary?
+
+```{r histogram for year, error = TRUE}
+ggplot(data = uoe_art_cleandate, aes(x = year)) +
+  geom_histogram(binwidth = 0.2)
+```
+
+I couldn't see it in the histogram, so I produced a frequencies table
+
+```{r frequency table for year, error = TRUE}
+frequency_table <- uoe_art_cleandate %>%
+  count(year) %>%
+  arrange(desc(year))
+print(frequency_table, n=6000)
+```
+
+ There's a "2" for year.
+
+### Exercise 13
+
+> Find which piece has the out of the ordinary year and go to its page on the art collection website to find the correct year for it. Can you tell why our code didn’t capture the correct year information? Correct the error in the data frame and visualize the data again.
+
+It's Death Mask, by H. Dempshall.
+
+On the website, it reads: Death Mask (2) (1964) 
+
+Evidently, when reading in the information, it read the (2) as the date, not 1964.
 
 
-Add exercise headings as needed.
+> Hint: You’ll want to use mutate() and if_else() or case_when() to implement the correction.
+
+
+```{r correcting year, error = TRUE}
+uoe_art_cleanyear <- uoe_art_cleandate %>%
+  mutate (newyear = case_when(
+    year == 2 ~ 1964,
+    TRUE ~ year 
+  )) 
+``` 
+
+
+### Exercise 14
+
+> Who is the most commonly featured artist in the collection? Do you know them? Any guess as to why the university has so many pieces from them?
+
+
+```{r frequency table for artist, error = TRUE}
+frequency_table_artist <- uoe_art_cleanyear %>%
+  count(artist) %>%
+  arrange(desc(n))
+print(frequency_table_artist)
+```
+
+Emma Gillies. Nope, never heard of her, but that doesn't mean much. According to google, the University of Edinburgh has a special collection of her work. 
+
+### Exercise 15
+
+> Final question! How many art pieces have the word “child” in their title? See if you can figure it out, and ask for help if not.
+
+```{r child in title, error = TRUE}
+uoe_art_cleanyear_child <- uoe_art_cleanyear %>%
+   mutate (child = case_when(
+    str_detect(title, regex("Child", ignore_case = TRUE)) ~ 1,
+    TRUE ~ 0 
+  )) 
+```
+
+```{r frequency table for child in table, error = TRUE}
+frequency_table_child <- uoe_art_cleanyear_child %>%
+  count(child) %>%
+  arrange(desc(child))
+print(frequency_table_child)
+```
+
+Child (or some version thereof) appears to show up in 11 titles. Note I didn't fully follow your hint, but this approach seemed to work fine. 
+
+
+
