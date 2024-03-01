@@ -1,7 +1,7 @@
 ---
 title: "Lab 08 - University of Edinburgh Art Collection"
-author: "Insert your name here"
-date: "Insert date here"
+author: "Eric Stone"
+date: "3.1.24"
 output: github_document
 ---
 
@@ -23,18 +23,30 @@ uoe_art <- read_csv("data/uoe-art.csv")
 uoe_art <- uoe_art %>%
   separate(title, into = c("title", "date"), sep = "\\(") %>%
   mutate(year = str_remove(date, "\\)") %>% as.numeric()) %>%
-  select(title, artist, year, ___)
+  select(title, artist, year, date)
 ```
 
 ### Exercise 10
 
-Remove this text, and add your answer for Exercise 10 here.
-Add code chunks as needed.
-Don't forget to label your code chunk.
-Do not use spaces in code chunk labels.
+> Fill in the blanks in to implement the data wrangling we described above. Note that this approach will result in some warnings when you run the code, and that’s OK! Read the warnings, and explain what they mean, and why we are ok with leaving them in given that our objective is to just capture year where it’s convenient to do so.
+
+
+```{r cleaning date, error = TRUE}
+uoe_art_cleandate <- uoe_art %>%
+  mutate(date = as.numeric(str_remove_all(date, "[^0-9]")))
+```
+
+I believe the warnings are saying that not all of the pieces have titles and dates to be separated. That's okay -- we just want to get rid of the dates from those that have them.
 
 ### Exercise 11
 
-...
+> Print out a summary of the data frame using the skim() function. How many pieces have artist info missing? How many have year info missing?
+
+```{r summary, error = TRUE}
+library(skimr)
+skim(uoe_art_cleandate)
+```
+
+
 
 Add exercise headings as needed.
