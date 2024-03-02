@@ -244,7 +244,14 @@ uoe_art_cleanyear <- uoe_art_cleandate %>%
     year == 2 ~ 1964,
     TRUE ~ year 
   )) 
+ggplot(data = uoe_art_cleanyear, aes(x = newyear)) +
+  geom_histogram(binwidth = 20.0)
 ```
+
+    ## Warning: Removed 1568 rows containing non-finite outside the scale range
+    ## (`stat_bin()`).
+
+![](lab-08_files/figure-gfm/correcting%20year-1.png)<!-- -->
 
 ### Exercise 14
 
