@@ -1,7 +1,7 @@
 Lab 08 - University of Edinburgh Art Collection
 ================
 Eric Stone
-3.1.24
+3.2.24
 
 ### Load packages and data
 
@@ -60,36 +60,33 @@ dates from those that have them.
 
 ``` r
 library(skimr)
-skim(uoe_art_cleandate)
+skim_data <- skim(uoe_art_cleandate)
+n_missing_artists <- skim_data %>% 
+  filter(skim_variable == "artist") %>% 
+  pull(n_missing)
+print(paste("Number of missing artists:", n_missing_artists))
 ```
 
-|                                                  |                   |
-|:-------------------------------------------------|:------------------|
-| Name                                             | uoe_art_cleandate |
-| Number of rows                                   | 3275              |
-| Number of columns                                | 4                 |
-| \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_   |                   |
-| Column type frequency:                           |                   |
-| character                                        | 2                 |
-| numeric                                          | 2                 |
-| \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ |                   |
-| Group variables                                  | None              |
+    ## [1] "Number of missing artists: 115"
 
-Data summary
+``` r
+n_missing_year <- skim_data %>% 
+  filter(skim_variable == "year") %>% 
+  pull(n_missing)
+print(paste("Number of missing year:", n_missing_year))
+```
 
-**Variable type: character**
+    ## [1] "Number of missing year: 1568"
 
-| skim_variable | n_missing | complete_rate | min | max | empty | n_unique | whitespace |
-|:--------------|----------:|--------------:|----:|----:|------:|---------:|-----------:|
-| title         |         0 |          1.00 |   0 |  95 |     7 |     1595 |          0 |
-| artist        |       115 |          0.96 |   2 |  55 |     0 |     1205 |          0 |
+I’m not sure if this is what you had in mind with in-line code, but I
+found the print command from Lab 3, and chat reminded me of the pull
+command (which you likely told me about already). So this seems to work.
 
-**Variable type: numeric**
-
-| skim_variable | n_missing | complete_rate |       mean |         sd |  p0 |  p25 |  p50 |  p75 |     p100 | hist  |
-|:--------------|----------:|--------------:|-----------:|-----------:|----:|-----:|-----:|-----:|---------:|:------|
-| year          |      1568 |          0.52 |    1964.37 |      53.57 |   2 | 1953 | 1962 | 1977 |     2020 | ▁▁▁▁▇ |
-| date          |      1042 |          0.68 | 1699133.89 | 5430175.99 |   2 | 1954 | 1963 | 1987 | 20022007 | ▇▁▁▁▁ |
+I’m not completely confident, however, this is what you had in mind,
+because I also found a previous comment from you that dicussed wrapping
+backticks around your r expression. I don’t really understand what that
+means, however, so if that is what you were intending, let’s talk about
+it Sunday.
 
 115 have artist missing. 1568 have year missing.
 
@@ -100,7 +97,7 @@ Data summary
 
 ``` r
 ggplot(data = uoe_art_cleandate, aes(x = year)) +
-  geom_histogram(binwidth = 0.2)
+  geom_histogram(binwidth = 20.0)
 ```
 
     ## Warning: Removed 1568 rows containing non-finite outside the scale range
@@ -108,7 +105,7 @@ ggplot(data = uoe_art_cleandate, aes(x = year)) +
 
 ![](lab-08_files/figure-gfm/histogram%20for%20year-1.png)<!-- -->
 
-I couldn’t see it in the histogram, so I produced a frequencies table
+You were right. A bin width of .2 wasn’t enough.
 
 ``` r
 frequency_table <- uoe_art_cleandate %>%
