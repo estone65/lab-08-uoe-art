@@ -78,15 +78,11 @@ print(paste("Number of missing year:", n_missing_year))
 
     ## [1] "Number of missing year: 1568"
 
+There are 115 missing artists and 1568 years.
+
 I’m not sure if this is what you had in mind with in-line code, but I
 found the print command from Lab 3, and chat reminded me of the pull
 command (which you likely told me about already). So this seems to work.
-
-I’m not completely confident, however, this is what you had in mind,
-because I also found a previous comment from you that dicussed wrapping
-backticks around your r expression. I don’t really understand what that
-means, however, so if that is what you were intending, let’s talk about
-it Sunday.
 
 115 have artist missing. 1568 have year missing.
 
